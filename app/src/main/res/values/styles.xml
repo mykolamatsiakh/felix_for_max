@@ -1,0 +1,46 @@
+<resources>
+
+    <!-- Base application theme. -->
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/ic_launcher_background</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="WardButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@color/blue_a400</item>
+        <item name="colorButtonNormal">@color/red_500</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="GoogleAuthSignInButton">
+        <item name="android:background">@drawable/common_google_signin_btn_text_light</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="GoogleSignInButton">
+        <item name="android:background">@drawable/drawable_google</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="FacebookSigninInButton">
+        <item name="android:background">@drawable/com_facebook_button_background</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:text">FACEBOOK SIGNIN</item>
+        <item name="android:drawableStart">@drawable/com_facebook_button_icon</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+    </style>
+
+
+
+</resources>

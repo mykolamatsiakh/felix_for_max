@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="facebook_app_id">412110992560233</string>
+
+    <string name="instagram_client_id"> 8a7081d3fd36476fad8df89d4591a6db</string>
+    <string name="instagram_callback_url">http://localhost:3000/</string>
+    <string name="instagram_client_secret"> fbc0d58dc46c46409dcc72506881de56</string>
+</resources>
