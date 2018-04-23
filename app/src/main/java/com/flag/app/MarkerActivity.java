@@ -5,6 +5,7 @@ package com.flag.app;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ViewSwitcher;
 
+import com.flag.FelixApplication;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +34,8 @@ public class MarkerActivity extends AppCompatActivity {
 
     private static final String TAG = "MarkerActivity";
 
+    private static final String EXTRA_USER = "EXTRA_USER";
+
     private DatabaseReference mDatabaseReference;
 
     private ViewSwitcher mViewSwitcher;
@@ -39,6 +43,13 @@ public class MarkerActivity extends AppCompatActivity {
     private FloatingActionButton mMapButton;
 
     private MarkerAdapter mMarkerAdapter;
+
+
+    public static Intent getStartIntent(Context context, User user) {
+        Intent intent = new Intent(context,MarkerActivity.class);
+        intent.putExtra(EXTRA_USER, user);
+        return intent;
+    }
 
     private final ValueEventListener mValueEventListener = new ValueEventListener() {
         @Override
@@ -83,8 +94,7 @@ public class MarkerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_markers);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
+        FelixApplication application = (FelixApplication) getApplication();
 
 
         mViewSwitcher = (ViewSwitcher) findViewById(R.id.view_switcher);

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/flagapp-flagandroid-cc6ed710de69.iml" filepath="$PROJECT_DIR$/flagapp-flagandroid-cc6ed710de69.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/smth_for_mykola.iml" filepath="$PROJECT_DIR$/.idea/smth_for_mykola.iml" />
     </modules>
   </component>
 </project>
