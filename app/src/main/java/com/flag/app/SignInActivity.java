@@ -1,14 +1,17 @@
 package com.flag.app;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -37,6 +40,8 @@ import com.flag.app.pref.UserPref;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 
@@ -46,6 +51,8 @@ public class SignInActivity extends AppCompatActivity implements
 //    private FacebookHelper mFbHelper;
 //    private GoogleSignInHelper mGAuthHelper;
     private InstagramHelper mInstagramHelper;
+
+    private static final String EMAIL = "email";
 
     InstagramApp mInstagramApp;
     Button mFacebookView;
@@ -78,7 +85,7 @@ public class SignInActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ((FelixApplication) this.getApplication()).setFirstStart(1);
-
+        Log.d("KEY HASH --->", printKeyHash(this));
         mInstagramApp = new InstagramApp(this, ApplicationData.CLIENT_ID,
                 ApplicationData.CLIENT_SECRET, ApplicationData.CALLBACK_URL);
         mInstagramApp.setListener(new InstagramApp.OAuthAuthenticationListener() {
@@ -101,11 +108,11 @@ public class SignInActivity extends AppCompatActivity implements
 
         mInstagramButton = findViewById(R.id.instagram_login_button);
         mFacebookView = findViewById(R.id.facebook_view);
-//        mFacebookView.setOnClickListener(this);
-//        mFacebookButton.setReadPermissions(EMAIL);
+        mFacebookView.setOnClickListener(this);
         mInstagramButton.setOnClickListener(this);
         callbackManager = CallbackManager.Factory.create();
         mFacebookButton = findViewById(R.id.fb_login_button1);
+        mFacebookButton.setReadPermissions(EMAIL);
         mFacebookButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -117,7 +124,7 @@ public class SignInActivity extends AppCompatActivity implements
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 String userName = "Unknown";
-                                String email = "mmatsiakh@gmail.com";
+                                String email = "myemail";
                                 String userSurname = "Unknown";
                                 try {
                                     //  email = response.getJSONObject().getString("email");
@@ -131,9 +138,12 @@ public class SignInActivity extends AppCompatActivity implements
 
                                 User user = new User(userid, userName, userSurname, email, User.Social.FACEBOOK, imgUrl);
                                 UserPref.get(SignInActivity.this).putUser(user);
+
                                 startActivity(MarkerActivity.getStartIntent(SignInActivity.this, user));
                                 finish();
-                                Toast.makeText(getApplicationContext(), user.toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Користувача "+user.getName()+
+                                        " "+user.getSurname()+ "  збережено",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
                 Bundle parameters = new Bundle();
@@ -184,14 +194,47 @@ public class SignInActivity extends AppCompatActivity implements
 //            case R.id.g_login_btn:
 //                mGAuthHelper.performSignIn(this);
 //                break;
-//               case R.id.bt_act_login_fb:
-//                    mFbHelper.performSignIn(this);
-//                    break;
+               case R.id.facebook_view:
+                    mFacebookButton.performClick();
+                    break;
                 case R.id.instagram_login_button:
                     connectOrDisconnectUser();
                     break;
             }
       }
+
+    public static String printKeyHash(Activity context) {
+        PackageInfo packageInfo;
+        String key = null;
+        try {
+            //getting application package name, as defined in manifest
+            String packageName = context.getApplicationContext().getPackageName();
+
+            //Retriving package info
+            packageInfo = context.getPackageManager().getPackageInfo(packageName,
+                    PackageManager.GET_SIGNATURES);
+
+            Log.e("Package Name=", context.getApplicationContext().getPackageName());
+
+            for (Signature signature : packageInfo.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                key = new String(Base64.encode(md.digest(), 0));
+
+                // String key = new String(Base64.encodeBytes(md.digest()));
+                Log.e("Key Hash=", key);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("Name not found", e1.toString());
+        }
+        catch (NoSuchAlgorithmException e) {
+            Log.e("No such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("Exception", e.toString());
+        }
+
+        return key;
+    }
 
     private void connectOrDisconnectUser() {
         if (mInstagramApp.hasAccessToken()) {
@@ -252,16 +295,16 @@ public class SignInActivity extends AppCompatActivity implements
 
 
 
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        //handle results
-//        mFbHelper.onActivityResult(requestCode, resultCode, data);
-//        mGAuthHelper.onActivityResult(requestCode, resultCode, data);
-//
-//
-//    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //handle results
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        finish();
+
+
+    }
 //
 //    @Override
 //    public void onFbSignInFail() {

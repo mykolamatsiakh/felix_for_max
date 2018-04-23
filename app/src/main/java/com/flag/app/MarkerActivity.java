@@ -8,15 +8,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.facebook.CallbackManager;
 import com.flag.FelixApplication;
+import com.flag.app.pref.UserPref;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,9 +38,13 @@ public class MarkerActivity extends AppCompatActivity {
 
     private static final String TAG = "MarkerActivity";
 
+    User mUser;
+
     private static final String EXTRA_USER = "EXTRA_USER";
 
     private DatabaseReference mDatabaseReference;
+    CallbackManager callbackManager;
+
 
     private ViewSwitcher mViewSwitcher;
 
@@ -95,7 +103,12 @@ public class MarkerActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FelixApplication application = (FelixApplication) getApplication();
-
+        ActivityCompat.requestPermissions(MarkerActivity.this,
+                new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        mUser = getIntent().getParcelableExtra(EXTRA_USER);
+        Toast.makeText(MarkerActivity.this,"Вітаємо, "+
+                UserPref.get(MarkerActivity.this).getUser().getName(), Toast.LENGTH_SHORT).show();
+        callbackManager = CallbackManager.Factory.create();
 
         mViewSwitcher = (ViewSwitcher) findViewById(R.id.view_switcher);
         mMapButton = (FloatingActionButton) findViewById(R.id.map_button);
