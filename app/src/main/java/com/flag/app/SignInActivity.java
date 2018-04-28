@@ -9,6 +9,7 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.MessageQueue;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -84,7 +85,10 @@ public class SignInActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        ((FelixApplication) this.getApplication()).setFirstStart(1);
+//        if (((FelixApplication) this.getApplication()).getFirstStart() == 1){
+//            Intent intent = new Intent(SignInActivity.this, MarkerActivity.class);
+//            startActivity(intent);
+//        }
         Log.d("KEY HASH --->", printKeyHash(this));
         mInstagramApp = new InstagramApp(this, ApplicationData.CLIENT_ID,
                 ApplicationData.CLIENT_SECRET, ApplicationData.CALLBACK_URL);
@@ -138,7 +142,6 @@ public class SignInActivity extends AppCompatActivity implements
 
                                 User user = new User(userid, userName, userSurname, email, User.Social.FACEBOOK, imgUrl);
                                 UserPref.get(SignInActivity.this).putUser(user);
-
                                 startActivity(MarkerActivity.getStartIntent(SignInActivity.this, user));
                                 finish();
                                 Toast.makeText(getApplicationContext(), "Користувача "+user.getName()+
@@ -151,6 +154,9 @@ public class SignInActivity extends AppCompatActivity implements
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
             }
+
+
+
 
 
             @Override

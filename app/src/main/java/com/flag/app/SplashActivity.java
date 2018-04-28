@@ -32,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void run() {
+              //  checkFirstRun();
                 checkFirstRun();
                 finish();
             }
@@ -39,34 +40,21 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void checkFirstRun() {
-
-        final String PREFS_NAME = "MyPrefsFile";
+        final String PREFS_NAME = "MyPrefsUser";
         final String PREF_VERSION_CODE_KEY = "version_code";
         final int DOESNT_EXIST = -1;
 
-        int currentVersionCode = BuildConfig.VERSION_CODE;
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        int savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
-        if (currentVersionCode == savedVersionCode) {
-
-            ((FelixApplication) this.getApplication()).setFirstStart(0);
+        int savedUserInt = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
+        if (savedUserInt == 1) {
             Intent i = new Intent(SplashActivity.this, MarkerActivity.class);
             startActivity(i);
-            return;
 
-        } else if (savedVersionCode == DOESNT_EXIST) {
-
-            ((FelixApplication) this.getApplication()).setFirstStart(1);
-            Intent i = new Intent(SplashActivity.this, SignInActivity.class);
-            startActivity(i);
-
-        } else if (currentVersionCode > savedVersionCode) {
-            ((FelixApplication) this.getApplication()).setFirstStart(1);
+        } else if (savedUserInt == DOESNT_EXIST) {
             Intent i = new Intent(SplashActivity.this, SignInActivity.class);
             startActivity(i);
         }
-        prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
     }
 }
 

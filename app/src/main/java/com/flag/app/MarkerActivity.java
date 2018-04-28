@@ -6,6 +6,7 @@ package com.flag.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -101,8 +102,15 @@ public class MarkerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_markers);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final String PREFS_NAME = "MyPrefsUser";
+        final String PREF_VERSION_CODE_KEY = "version_code";
+        final int DOESNT_EXIST = -1;
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        prefs.edit().putInt(PREF_VERSION_CODE_KEY, 1).apply();
+
         setSupportActionBar(toolbar);
-        FelixApplication application = (FelixApplication) getApplication();
+        ((FelixApplication) this.getApplication()).setFirstStart(1);
         ActivityCompat.requestPermissions(MarkerActivity.this,
                 new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         mUser = getIntent().getParcelableExtra(EXTRA_USER);
