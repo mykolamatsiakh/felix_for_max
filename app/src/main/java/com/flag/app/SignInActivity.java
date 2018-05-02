@@ -162,6 +162,7 @@ public class SignInActivity extends AppCompatActivity implements
             @Override
             public void onCancel() {
                 Toast.makeText(getApplicationContext(), "BAD", Toast.LENGTH_SHORT).show();
+                onBackPressed();
             }
 
             @Override
